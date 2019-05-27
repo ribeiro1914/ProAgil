@@ -41,7 +41,7 @@ namespace ProAgil.API.Controllers
             try
             {
                 //await -> a cada chamada da controller sera criada uma instancia e a cada chamada será aberta uma thread
-                var results = await _repo.GetAllEventoAsyncById(EventoId, true);
+                var results = await _repo.GetEventoAsyncById(EventoId, true);
 
                 return Ok(results);    
             }
@@ -92,13 +92,12 @@ namespace ProAgil.API.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(int EventoId, Evento model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Evento model)
         {
             try
             {
-                var evento = await _repo.GetAllEventoAsyncById(EventoId, false);
-
+                var evento = await _repo.GetEventoAsyncById(id, false);
                 if(evento == null) return NotFound();
 
                 _repo.Update(model);
@@ -109,21 +108,21 @@ namespace ProAgil.API.Controllers
                 }
                   
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, ex);
+                //return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
             }
 
             return BadRequest();
         }
 
-         [HttpDelete]
+        [HttpDelete("{EventoId}")]
         public async Task<IActionResult> Delete(int EventoId)
         {
             try
             {
-                var evento = await _repo.GetAllEventoAsyncById(EventoId, false);
+                var evento = await _repo.GetEventoAsyncById(EventoId, false);
 
                 if(evento == null) return NotFound();
                 

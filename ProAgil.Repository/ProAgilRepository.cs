@@ -71,23 +71,26 @@ namespace ProAgil.Repository
             
             return await query.ToArrayAsync();
         }
-        public async Task<Evento> GetAllEventoAsyncById(int EventoId, bool includePalestrante)
+        public async Task<Evento> GetEventoAsyncById(int EventoId, bool includePalestrante)
         {
              IQueryable<Evento> query = _context.Eventos
             .Include(c => c.Lotes)
             .Include(c => c.RedeSociais);
 
-            if(includePalestrante)
+            if (includePalestrante)
             {
-                query = query.Include(pe => pe.PalestranteEvento)
-                .ThenInclude(p => p.Palestrante);
+                query = query
+                    .Include(pe => pe.PalestranteEvento)
+                    .ThenInclude(p => p.Palestrante);
             }
-            query = query.OrderByDescending(c => c.DataEvento).Where(c => c.EventoId == EventoId);
+
+            query = query
+                        .AsNoTracking()
+                        .OrderBy(c => c.EventoId)
+                        .Where(c => c.EventoId == EventoId);
 
             return await query.FirstOrDefaultAsync();
         }
-
-
         #endregion
 
         #region Palestrante

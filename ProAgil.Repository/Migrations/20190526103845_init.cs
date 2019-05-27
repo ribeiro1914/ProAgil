@@ -19,6 +19,7 @@ namespace ProAgil.Repository.Migrations
                     Tema = table.Column<string>(nullable: true),
                     ImagemURL = table.Column<string>(nullable: true),
                     Telefone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     Lote = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
